@@ -29,12 +29,71 @@
     </parent>
 
     <artifactId>karaf-maven-plugin</artifactId>
+    <!-- DEPATCH: CreateKarMojo fixed for Maven 3.9, see README-DEPATCH.md -->
+    <version>3.0.10-DEPATCH1</version>
     <packaging>maven-plugin</packaging>
     <name>Apache Karaf :: Tooling :: Maven Karaf Plugin</name>
 
     <properties>
         <appendedResourcesDirectory>${basedir}/../../etc/appended-resources</appendedResourcesDirectory>
     </properties>
+
+    <!-- DEPATCH: the parent manages the Karaf modules with ${project.version}, which is the DEPATCH version here;
+         they stay on the upstream release. -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.karaf</groupId>
+                <artifactId>org.apache.karaf.util</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.karaf.deployer</groupId>
+                <artifactId>org.apache.karaf.deployer.blueprint</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.karaf.deployer</groupId>
+                <artifactId>org.apache.karaf.deployer.features</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.karaf.deployer</groupId>
+                <artifactId>org.apache.karaf.deployer.kar</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.karaf.deployer</groupId>
+                <artifactId>org.apache.karaf.deployer.spring</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.karaf.features</groupId>
+                <artifactId>org.apache.karaf.features.core</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.karaf.jaas</groupId>
+                <artifactId>org.apache.karaf.jaas.config</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.karaf.jaas</groupId>
+                <artifactId>org.apache.karaf.jaas.modules</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.karaf.kar</groupId>
+                <artifactId>org.apache.karaf.kar.core</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.karaf.shell</groupId>
+                <artifactId>org.apache.karaf.shell.console</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
 

@@ -320,9 +320,13 @@ public class CreateKarMojo extends MojoSupport {
 
                 if (artifact.isSnapshot()) {
                     // the artifact is a snapshot, create the maven-metadata-local.xml
+                    String artifactDir = layout.pathOf(artifact).substring(0, layout.pathOf(artifact).lastIndexOf('/'));
                     File metadataTarget = new File(localFile.getParentFile(), "maven-metadata-local.xml");
                     if (!metadataTarget.exists()) {
-                        // the maven-metadata-local.xml doesn't exist, create it
+                        // DEPATCH: create the maven-metadata-local.xml below the build directory,
+                        // never in the local Maven repository. Maven 3.9 reads such a file there as a local
+                        // installation of a SNAPSHOT that was never installed and fails with "Could not find artifact".
+                        metadataTarget = new File(outputDirectory, "kar-metadata/" + artifactDir + "/maven-metadata-local.xml");
                         try {
                             MavenUtil.generateMavenMetadata(artifact, metadataTarget);
                         } catch (Exception e) {
@@ -330,7 +334,7 @@ public class CreateKarMojo extends MojoSupport {
                             getLog().warn("It means that this SNAPSHOT could be overwritten by an older one present on remote repositories");
                         }
                     }
-                    jarArchiver.addFile(metadataTarget, repositoryPath + layout.pathOf(artifact).substring(0, layout.pathOf(artifact).lastIndexOf('/')) + "/maven-metadata-local.xml");
+                    jarArchiver.addFile(metadataTarget, repositoryPath + artifactDir + "/maven-metadata-local.xml");
                 }
 
                 //TODO this may not be reasonable, but... resolved snapshot artifacts have timestamped versions
